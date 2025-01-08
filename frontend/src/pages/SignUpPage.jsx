@@ -16,9 +16,20 @@ const SignUpPage = () => {
 
   const {signup, isSigningUp}=useAuthStore();
 
-  const validateForm=()=>{}
+  const validateForm=()=>{
+    if(!formData.fullName.trim()) return toast.error("Ajouter le nom complet");
+    if (!formData.email.trim()) return toast.error("Ajouter l'adresse mail");
+    if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Le format du mail est invalide");
+    if (!formData.password) return toast.error("Ajouter votre mot de passe");
+    if (formData.password.length < 6) return toast.error("Votre mot de passe doit avoir aumoins 6 caracters");
+
+    return true;
+  }
   const handleSubmit=(e)=>{
-    e.preventDefault()
+    e.preventDefault();
+    const success = validateForm();
+
+    if (success === true) signup(formData);
   }
 
   return <div className="min-h-screen grid lg: grid-cols-2">
@@ -68,7 +79,7 @@ const SignUpPage = () => {
                 <input
                   type="email"
                   className={`input input-bordered w-full pl-10`}
-                  placeholder="you@example.com"
+                  placeholder="votre@exemple.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
@@ -127,7 +138,7 @@ const SignUpPage = () => {
 
      <AuthImagePattern
         title="Rejoigner notre communaute"
-        subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
+        subtitle="Connectez-vous avec vos amis, partagez des moments et restez en contact avec vos proches."
       />
   </div>
   
